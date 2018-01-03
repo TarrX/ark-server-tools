@@ -710,32 +710,8 @@ function getServerMapFilename(){
   local mapname="$1"
   local savedir="$2"
 
-  # Take into account screwed up casing of saved ark files
-  # in some environments
-  local mapfile="$(find "${savedir}" -iname "${mapname}.ark" | head -n1)"
-
-  if [ -z "$mapfile" ]; then
-    sleep 2
-    mapfile="$(find "${savedir}" -iname "${mapname}.ark" | head -n1)"
-  fi
-
-  # If both attempts fail, server may have
-  # crashed between unlink and rename
-  if [ -z "$mapfile" ]; then
-    mapfile="$(find "${savedir}" -iname "${mapname}.tmp" | head -n1)"
-  fi
-
-  # If neither the ark nor the tmp file exists, then the
-  # map name may be incorrect.  Try to get any ark or tmp
-  # file in the saved arks directory
-  if [ -z "$mapfile" ]; then
-    mapfile="$(find "${savedir}" -iname "*.ark" | head -n1)"
-
-    if [ -z "$mapfile" ]; then
-      mapfile="$(find "${savedir}" -iname "*.tmp" | head -n1)"
-    fi
-  fi
-
+  mapfile="${savedir}/${mapname}.ark"
+ 
   echo "${mapfile}"
 }
 
